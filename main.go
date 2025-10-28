@@ -9,11 +9,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"mike-pr.com/booleans_as_a_service/booleans"
 	_ "mike-pr.com/booleans_as_a_service/docs"
+	"mike-pr.com/booleans_as_a_service/handlers/booleans"
+	"mike-pr.com/booleans_as_a_service/handlers/user"
+	"mike-pr.com/booleans_as_a_service/handlers/users"
 	"mike-pr.com/booleans_as_a_service/models"
-	"mike-pr.com/booleans_as_a_service/user"
-	"mike-pr.com/booleans_as_a_service/users"
 )
 
 var db *gorm.DB
