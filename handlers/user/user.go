@@ -12,9 +12,6 @@ import (
 // @Produce json
 // @Param username path string true "username of user to delete"
 // @Success 200 {object} models.MessageResponse "User Deleted"
-// @Failure 400 {object} models.MessageResponse "Username Required"
-// @Failure 401 {object} models.MessageResponse "Authentication Required"
-// @Failure 403 {object} models.MessageResponse "Key Mismatch"
 // @Failure 404 {object} models.MessageResponse "User Not Found"
 // @Security ApiKeyAuth
 // @Router /users/{username} [delete]
