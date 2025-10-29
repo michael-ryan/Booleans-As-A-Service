@@ -68,7 +68,7 @@ func Create(db *gorm.DB) gin.HandlerFunc {
 		// Check if boolean already exists for this user
 		var existing models.Boolean
 		if err := db.Where("user_id = ? AND name = ?", user.ID, name).First(&existing).Error; err == nil {
-			c.JSON(409, models.MessageResponse{Message: "Boolean already exists for this user"})
+			c.JSON(409, models.MessageResponse{Message: "Boolean already exists with this name"})
 			return
 		} else if err != gorm.ErrRecordNotFound {
 			c.JSON(500, models.MessageResponse{Message: "Database error"})

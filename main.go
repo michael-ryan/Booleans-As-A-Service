@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -10,6 +11,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	_ "mike-pr.com/booleans_as_a_service/docs"
+	"mike-pr.com/booleans_as_a_service/handlers/boolean"
 	"mike-pr.com/booleans_as_a_service/handlers/booleans"
 	"mike-pr.com/booleans_as_a_service/handlers/user"
 	"mike-pr.com/booleans_as_a_service/handlers/users"
@@ -40,10 +42,9 @@ func main() {
 	r.GET("/users/:username/booleans", booleans.Get(db))
 	r.POST("/users/:username/booleans", booleans.Create(db))
 
-	// // boolean
-	// r.GET("/users/:username/booleans/:boolean", getBoolean)
-	// r.POST("/users/:username/booleans/:boolean", createBoolean)
-	// r.DELETE("/users/:username/booleans/:boolean", deleteBoolean)
+	// boolean
+	r.GET("/users/:username/booleans/:boolean", boolean.Get(db))
+	r.DELETE("/users/:username/booleans/:boolean", boolean.Delete(db))
 
 	if err := r.Run(":8080"); err != nil {
 		panic(fmt.Errorf("Could not start server: %w", err))
@@ -52,9 +53,23 @@ func main() {
 
 func initDB() *gorm.DB {
 	dsn := os.Getenv("DATABASE_URL")
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database: " + err.Error())
+	retries := 5
+	dbOk := false
+	var db *gorm.DB
+	var err error
+	for i := 1; i < retries; i++ {
+		fmt.Printf("Attempt %v of %v to connect to database...\n", i, retries)
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err == nil {
+			dbOk = true
+			break
+		} else {
+			fmt.Printf("Database connection failed. Wait 5s and try again.\n")
+			time.Sleep(time.Second * 5)
+		}
+	}
+	if !dbOk {
+		panic(fmt.Sprintf("failed to connect database after %v attempts: ", retries) + err.Error())
 	}
 	err = db.AutoMigrate(&models.User{}, &models.Boolean{})
 	if err != nil {

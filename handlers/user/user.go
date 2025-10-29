@@ -24,7 +24,7 @@ func Delete(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if err := db.Delete(&user).Error; err != nil {
+		if err := db.Delete(&user, user.ID).Error; err != nil {
 			c.JSON(500, models.MessageResponse{Message: "Failed to delete user"})
 			return
 		}

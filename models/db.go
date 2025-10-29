@@ -4,7 +4,7 @@ type User struct {
 	ID       uint      `gorm:"primaryKey"`
 	Username string    `gorm:"unique;not null"` // Unique username
 	APIKey   string    `gorm:"not null"`        // API key for authentication
-	Booleans []Boolean // One-to-many relation
+	Booleans []Boolean `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type Boolean struct {
