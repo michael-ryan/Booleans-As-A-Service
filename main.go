@@ -22,7 +22,6 @@ var db *gorm.DB
 
 // @title Booleans as a Service API
 // @description This is a simple API to manage booleans. Supports user-level private booleans.
-// @host localhost:8080
 // @BasePath /
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
