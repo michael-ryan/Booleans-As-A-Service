@@ -10,7 +10,7 @@ import (
 
 // Returns the database model of the user if the username is paired with a correct API key header, nil otherwise.
 // If authentication is unsuccessful, this function will write appropriate error codes and messages to the gin context.
-// You MUST NOT continue to process a request if this function returns false.
+// You MUST NOT continue to process a request if this function returns nil.
 func Authenticate(c *gin.Context, db *gorm.DB, username string) *models.User {
 	if username == "" {
 		c.JSON(400, models.MessageResponse{Message: "Username is required"})
