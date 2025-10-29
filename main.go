@@ -46,7 +46,7 @@ func main() {
 	r.GET("/users/:username/booleans/:boolean", boolean.Get(db))
 	r.DELETE("/users/:username/booleans/:boolean", boolean.Delete(db))
 
-	if err := r.Run(":8080"); err != nil {
+	if err := r.Run(fmt.Sprintf(":%v", os.Getenv("PORT"))); err != nil {
 		panic(fmt.Errorf("Could not start server: %w", err))
 	}
 }
