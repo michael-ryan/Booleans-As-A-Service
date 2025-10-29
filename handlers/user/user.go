@@ -22,9 +22,8 @@ import (
 func Delete(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		username := c.Param("username")
-		ok, user := security.Authenticate(c, db, username)
-
-		if !ok {
+		user := security.Authenticate(c, db, username)
+		if user == nil {
 			return
 		}
 

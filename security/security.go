@@ -8,19 +8,19 @@ import (
 	"mike-pr.com/booleans_as_a_service/models"
 )
 
-// Returns true if the username is paired with a correct API key header, false otherwise.
-// If true, this function also returns the db model for the user.
+// Returns the database model of the user if the username is paired with a correct API key header, nil otherwise.
+// If authentication is unsuccessful, this function will write appropriate error codes and messages to the gin context.
 // You MUST NOT continue to process a request if this function returns false.
-func Authenticate(c *gin.Context, db *gorm.DB, username string) (bool, *models.User) {
+func Authenticate(c *gin.Context, db *gorm.DB, username string) *models.User {
 	if username == "" {
 		c.JSON(400, models.MessageResponse{Message: "Username is required"})
-		return false, nil
+		return nil
 	}
 
 	apiKey := c.GetHeader("X-API-KEY")
 	if apiKey == "" {
 		c.JSON(401, models.MessageResponse{Message: "Authentication required"})
-		return false, nil
+		return nil
 	}
 
 	var user models.User
@@ -31,13 +31,13 @@ func Authenticate(c *gin.Context, db *gorm.DB, username string) (bool, *models.U
 		} else {
 			c.JSON(500, models.MessageResponse{Message: "Database error"})
 		}
-		return false, nil
+		return nil
 	}
 
 	if user.APIKey != apiKey {
 		c.JSON(403, models.MessageResponse{Message: "API key does not match"})
-		return false, nil
+		return nil
 	}
 
-	return true, &user
+	return &user
 }
