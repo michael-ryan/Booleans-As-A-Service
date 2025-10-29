@@ -32,12 +32,12 @@ func Get(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		booleanResponses := make([]models.BooleanResponse, 0)
+		boolNames := make([]string, 0)
 		for _, b := range booleans {
-			booleanResponses = append(booleanResponses, models.BooleanResponse{Name: b.Name, Value: b.Value})
+			boolNames = append(boolNames, b.Name)
 		}
 
-		c.JSON(200, models.BooleansResponse{Booleans: booleanResponses})
+		c.JSON(200, models.BooleansResponse{Names: boolNames})
 	}
 }
 

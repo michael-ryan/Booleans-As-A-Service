@@ -14,5 +14,5 @@ type BooleanResponse struct {
 }
 
 type BooleansResponse struct {
-	Booleans []BooleanResponse `json:"booleans"`
+	Names []string `json:"names"`
 }
